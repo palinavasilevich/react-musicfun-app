@@ -1,35 +1,22 @@
-import { useEffect } from "react";
+import { client } from "./shared/api/client";
+import { useQuery } from "@tanstack/react-query";
 
 function App() {
-  useEffect(() => {
-    const fetchPlaylists = async () => {
-      try {
-        const response = await fetch(
-          "https://musicfun.it-incubator.app/api/1.0/playlists",
-          {
-            headers: {
-              "api-key": "c5979a0f-1886-4e63-9bc2-3546b075c045",
-            },
-          }
-        );
+  const fetchPlaylists = () => client.GET("/playlists");
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch playlists.");
-        }
-
-        const data = await response.json();
-        console.log(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchPlaylists();
-  }, []);
+  const { data: playlists } = useQuery({
+    queryKey: ["playlists"],
+    queryFn: fetchPlaylists,
+  });
 
   return (
     <>
       <h1>HELLO</h1>
+      <ul>
+        {playlists?.data?.data.map((playlist) => (
+          <li>{playlist.attributes.title}</li>
+        ))}
+      </ul>
     </>
   );
 }
