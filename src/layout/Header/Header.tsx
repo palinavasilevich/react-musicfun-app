@@ -9,11 +9,24 @@ type Props = {
 };
 
 export const Header = ({ renderAccountBar }: Props) => {
+  const menuItems = [
+    { name: "Playlists", path: "/" },
+    { name: "My Playlists", path: "/my-playlists" },
+  ];
   return (
     <header className={cls.header}>
       <div className={cls.linksBlock}>
-        <Link to="/">Playlists</Link>
-        <Link to="/my-playlists">My Playlists</Link>
+        {menuItems.map((item) => (
+          <Link
+            key={item.name}
+            to={item.path}
+            className={cls.link}
+            activeProps={{ className: cls.activeLink }}
+            activeOptions={{ exact: true }}
+          >
+            {item.name}
+          </Link>
+        ))}
       </div>
 
       <div>{renderAccountBar()}</div>

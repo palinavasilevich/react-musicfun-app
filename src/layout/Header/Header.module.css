@@ -4,11 +4,19 @@
   align-items: center;
   justify-content: space-between;
 
-  height: var(--header-height);
-  padding: 0 32px;
+  padding: 1rem 2.5rem;
+  border-bottom: var(--color-border-base) 1px solid;
 }
 
 .linksBlock {
   display: flex;
   gap: 10px;
+}
+
+.activeLink {
+  color: var(--color-accent);
+}
+
+.link:hover {
+  color: var(--color-accent);
 }
