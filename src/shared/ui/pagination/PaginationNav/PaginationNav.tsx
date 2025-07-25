@@ -1,6 +1,6 @@
-import { getPaginationPages } from "../utils/get-pagination-pages.ts";
+import { getPaginationPages } from "../utils/get-pagination-pages";
 
-import cls from "./pagination-nav.module.css";
+import cls from "./PaginationNav.module.css";
 
 type Props = {
   current: number;

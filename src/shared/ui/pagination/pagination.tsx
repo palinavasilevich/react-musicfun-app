@@ -1,25 +1,26 @@
-import { PaginationNav } from "./pagination-nav/pagination-nav.tsx";
-import cls from "./pagination.module.css";
+import { PaginationNav } from "./PaginationNav/PaginationNav.tsx";
+
+import cls from "./Pagination.module.css";
 
 type Props = {
-  current: number;
+  currentPage: number;
   pagesCount: number;
-  changePageNumber: (page: number) => void;
+  onChangePageNumber: (page: number) => void;
   isFetching: boolean;
 };
 
 export const Pagination = ({
-  current,
+  currentPage,
   pagesCount,
-  changePageNumber,
+  onChangePageNumber,
   isFetching,
 }: Props) => {
   return (
     <div className={cls.container}>
       <PaginationNav
-        current={current}
+        current={currentPage}
         pagesCount={pagesCount}
-        onChange={changePageNumber}
+        onChange={onChangePageNumber}
       />
       {isFetching && "⌛️"}
     </div>
