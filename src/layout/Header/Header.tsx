@@ -11,15 +11,12 @@ type Props = {
 export const Header = ({ renderAccountBar }: Props) => {
   return (
     <header className={cls.header}>
-      <div className={cls.container}>
-        <div className={cls.linksBlock}>
-          <Link to="/">Playlists</Link>
-          <Link to="/my-playlists">My Playlists</Link>
-          <Link to="/oauth/callback">TEMP PAGE</Link>
-        </div>
-
-        <div>{renderAccountBar()}</div>
+      <div className={cls.linksBlock}>
+        <Link to="/">Playlists</Link>
+        <Link to="/my-playlists">My Playlists</Link>
       </div>
+
+      <div>{renderAccountBar()}</div>
     </header>
   );
 };
