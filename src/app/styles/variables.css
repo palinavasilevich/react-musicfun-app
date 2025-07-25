@@ -28,7 +28,8 @@
 
   /*
   * Typography
-  */
+ */
+  --font-family-primary: "Josefin Sans", sans-serif;
 
   /* font-sizes */
   --font-size-xxxs: 12px;
