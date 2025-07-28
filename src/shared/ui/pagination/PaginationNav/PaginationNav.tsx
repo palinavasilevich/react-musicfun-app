@@ -10,7 +10,12 @@ type Props = {
 
 const SIBLING_COUNT = 1;
 
-export const PaginationNav = ({ current, pagesCount, onChange }: Props) => {
+export const PaginationNav = ({
+  current,
+  pagesCount,
+
+  onChange,
+}: Props) => {
   const pages = getPaginationPages(current, pagesCount, SIBLING_COUNT);
 
   return (
