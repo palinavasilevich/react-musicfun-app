@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ChangeEvent } from "react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
 import { client } from "../../shared/api/client";
@@ -8,6 +8,11 @@ import cls from "./Playlists.module.css";
 
 export const Playlists = () => {
   const [page, setPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.currentTarget.value);
+  };
 
   const {
     data: playlists,
@@ -16,12 +21,13 @@ export const Playlists = () => {
     isError,
     error,
   } = useQuery({
-    queryKey: ["playlists", page],
+    queryKey: ["playlists", { page, search: searchTerm }],
     queryFn: async ({ signal }) => {
       const response = await client.GET("/playlists", {
         params: {
           query: {
             pageNumber: page,
+            search: searchTerm,
           },
         },
         signal,
@@ -42,6 +48,14 @@ export const Playlists = () => {
 
   return (
     <div className={cls.playlists}>
+      <div>
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={handleSearch}
+          placeholder="Searching playlists..."
+        />
+      </div>
       <div className={cls.paginationContainer}>
         <Pagination
           pagesCount={playlists.meta.pagesCount}
