@@ -1,2 +1,2 @@
-export { PlaylistsPage } from "./PlaylistsPage";
-export { PlaylistPage } from "./PlaylistPage";
+export * from "./PlaylistsPage";
+export * from "./PlaylistPage";
