@@ -24,6 +24,11 @@ export const LoginButton = () => {
 
       return response.data;
     },
+
+    onSuccess: ({ refreshToken, accessToken }) => {
+      localStorage.setItem("musicfun-refresh-token", refreshToken);
+      localStorage.setItem("musicfun-access-token", accessToken);
+    },
   });
 
   const handleLoginClick = () => {
