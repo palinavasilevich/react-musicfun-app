@@ -1,8 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
-
 import { client } from "../../../../shared/api/client";
-
-import cls from "./LoginButton.module.css";
+import { Button } from "../../../../shared/components";
 
 export const LoginButton = () => {
   const callbackUrl = "http://localhost:5173/oauth/callback";
@@ -60,8 +58,14 @@ export const LoginButton = () => {
   };
 
   return (
-    <button className={cls.loginButton} onClick={handleLoginClick}>
-      Login with APIHUB
-    </button>
+    <Button
+      as="button"
+      target="_blank"
+      variant="primary"
+      fullWidth
+      onClick={handleLoginClick}
+    >
+      Sign in with APIHub
+    </Button>
   );
 };

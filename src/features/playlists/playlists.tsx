@@ -5,6 +5,7 @@ import { client } from "../../shared/api/client";
 import { Pagination } from "../../shared/ui/pagination";
 
 import cls from "./Playlists.module.css";
+import { SearchField } from "../../shared/components";
 
 export const Playlists = () => {
   const [page, setPage] = useState(1);
@@ -48,27 +49,24 @@ export const Playlists = () => {
 
   return (
     <div className={cls.playlists}>
-      <div>
-        <input
-          type="text"
-          value={searchTerm}
-          onChange={handleSearch}
-          placeholder="Searching playlists..."
-        />
-      </div>
-      <div className={cls.paginationContainer}>
-        <Pagination
-          pagesCount={playlists.meta.pagesCount}
-          currentPage={page}
-          onChangePageNumber={setPage}
-          isFetching={isFetching}
-        />
-      </div>
+      <SearchField
+        value={searchTerm}
+        onChange={handleSearch}
+        placeholder="Search playlists"
+      />
+
       <ul>
         {playlists.data.map((playlist) => (
           <li key={playlist.id}>{playlist.attributes.title}</li>
         ))}
       </ul>
+
+      <Pagination
+        pagesCount={playlists.meta.pagesCount}
+        currentPage={page}
+        onChangePageNumber={setPage}
+        isFetching={isFetching}
+      />
     </div>
   );
 };
