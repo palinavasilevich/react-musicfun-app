@@ -1,33 +1,9 @@
-import { useMutation } from "@tanstack/react-query";
-import { client } from "../../../../shared/api/client";
 import { Button } from "../../../../shared/components";
+import { ProfileIcon } from "../../../../shared/icons";
+import { callbackUrl, useLoginMutation } from "../../api/useLoginMutation";
 
 export const LoginButton = () => {
-  const callbackUrl = "http://localhost:5173/oauth/callback";
-
-  const { mutate } = useMutation({
-    mutationFn: async ({ code }: { code: string }) => {
-      const response = await client.POST("/auth/login", {
-        body: {
-          code,
-          redirectUri: callbackUrl,
-          rememberMe: true,
-          accessTokenTTL: "1d",
-        },
-      });
-
-      if (response.error) {
-        throw new Error(response.error.message);
-      }
-
-      return response.data;
-    },
-
-    onSuccess: ({ refreshToken, accessToken }) => {
-      localStorage.setItem("musicfun-refresh-token", refreshToken);
-      localStorage.setItem("musicfun-access-token", accessToken);
-    },
-  });
+  const { mutate: login } = useLoginMutation();
 
   const handleLoginClick = () => {
     window.addEventListener("message", handleOauthMessage);
@@ -54,7 +30,7 @@ export const LoginButton = () => {
       return;
     }
 
-    mutate({ code });
+    login({ code });
   };
 
   return (
@@ -65,6 +41,7 @@ export const LoginButton = () => {
       fullWidth
       onClick={handleLoginClick}
     >
+      <ProfileIcon />
       Sign in with APIHub
     </Button>
   );
