@@ -1,4 +1,5 @@
 import { Button } from "../../../../shared/components";
+import { apiBaseUrl } from "../../../../shared/config/api.config";
 import { ProfileIcon } from "../../../../shared/icons";
 import { callbackUrl, useLoginMutation } from "../../api/useLoginMutation";
 
@@ -9,7 +10,7 @@ export const LoginButton = () => {
     window.addEventListener("message", handleOauthMessage);
 
     window.open(
-      `https://musicfun.it-incubator.app/api/1.0/auth/oauth-redirect?callbackUrl=${callbackUrl}`,
+      `${apiBaseUrl}/auth/oauth-redirect?callbackUrl=${callbackUrl}`,
       "apihub-oauth2",
       "width=500, height=500"
     );

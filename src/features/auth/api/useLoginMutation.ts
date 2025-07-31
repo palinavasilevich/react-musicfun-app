@@ -13,7 +13,7 @@ export const useLoginMutation = () => {
           code,
           redirectUri: callbackUrl,
           rememberMe: true,
-          accessTokenTTL: "1d",
+          accessTokenTTL: "10s",
         },
       });
 
