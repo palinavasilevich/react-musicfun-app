@@ -9,10 +9,8 @@ type Props = {
 };
 
 export const Header = ({ renderAccountBar }: Props) => {
-  const menuItems = [
-    { name: "Playlists", path: "/" },
-    { name: "My Playlists", path: "/my-playlists" },
-  ];
+  const menuItems = [{ name: "Playlists", path: "/" }];
+
   return (
     <header className={cls.header}>
       <div className={cls.linksBlock}>

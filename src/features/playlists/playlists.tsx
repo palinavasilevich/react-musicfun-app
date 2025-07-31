@@ -3,11 +3,15 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
 import { client } from "../../shared/api/client";
 import { Pagination } from "../../shared/ui/pagination";
-
-import cls from "./Playlists.module.css";
 import { SearchField } from "../../shared/components";
 
-export const Playlists = () => {
+import cls from "./Playlists.module.css";
+
+type Props = {
+  userId?: string;
+};
+
+export const Playlists = ({ userId }: Props) => {
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -22,13 +26,14 @@ export const Playlists = () => {
     isError,
     error,
   } = useQuery({
-    queryKey: ["playlists", { page, search: searchTerm }],
+    queryKey: ["playlists", { page, search: searchTerm, userId }],
     queryFn: async ({ signal }) => {
       const response = await client.GET("/playlists", {
         params: {
           query: {
             pageNumber: page,
             search: searchTerm,
+            userId,
           },
         },
         signal,

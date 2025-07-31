@@ -3,3 +3,7 @@
   align-items: center;
   gap: 0 1rem;
 }
+
+.link:hover {
+  color: var(--color-accent);
+}

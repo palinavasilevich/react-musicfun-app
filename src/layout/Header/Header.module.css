@@ -13,10 +13,7 @@
   gap: 10px;
 }
 
-.activeLink {
-  color: var(--color-accent);
-}
-
+.activeLink,
 .link:hover {
   color: var(--color-accent);
 }

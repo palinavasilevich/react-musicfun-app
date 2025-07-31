@@ -13,7 +13,11 @@ export const CurrentUser = () => {
 
   return (
     <div className={cls.meInfoContainer}>
-      <Link to="/my-playlists" activeOptions={{ exact: true }}>
+      <Link
+        to="/my-playlists"
+        className={cls.link}
+        activeOptions={{ exact: true }}
+      >
         {data!.login}
       </Link>
       <LogoutButton />
