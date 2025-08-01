@@ -7,7 +7,7 @@ import { client } from "../../../../shared/api/client";
 import type { SchemaCreatePlaylistRequestPayload } from "../../../../shared/api/schema";
 
 export const AddPlaylistForm = () => {
-  const { register, handleSubmit } =
+  const { register, handleSubmit, reset } =
     useForm<SchemaCreatePlaylistRequestPayload>();
 
   const queryClient = useQueryClient();
@@ -25,6 +25,8 @@ export const AddPlaylistForm = () => {
         queryKey: ["playlists"],
         refetchType: "all",
       });
+
+      reset();
     },
   });
 
