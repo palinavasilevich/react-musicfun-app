@@ -1,9 +1,9 @@
 import { useState, type ChangeEvent } from "react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
-import { client } from "../../shared/api/client";
-import { Pagination } from "../../shared/ui/pagination";
-import { SearchField } from "../../shared/components";
+import { client } from "../../../../shared/api/client";
+import { Pagination } from "../../../../shared/ui/pagination";
+import { SearchField } from "../../../../shared/components";
 
 import cls from "./Playlists.module.css";
 
