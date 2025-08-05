@@ -4,6 +4,7 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { client } from "../../../../shared/api/client";
 import { Pagination } from "../../../../shared/ui/pagination";
 import { SearchField } from "../../../../shared/components";
+import { DeletePlaylistButton } from "../DeletePlaylistButton";
 
 import cls from "./Playlists.module.css";
 
@@ -60,9 +61,14 @@ export const Playlists = ({ userId }: Props) => {
         placeholder="Search playlists"
       />
 
-      <ul>
+      <ul className={cls.list}>
         {playlists.data.map((playlist) => (
-          <li key={playlist.id}>{playlist.attributes.title}</li>
+          <li key={playlist.id} className={cls.playlist}>
+            {playlist.attributes.title}
+            {playlist.attributes.user.id === userId && (
+              <DeletePlaylistButton playlistId={playlist.id} />
+            )}
+          </li>
         ))}
       </ul>
 
