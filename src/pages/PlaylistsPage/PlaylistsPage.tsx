@@ -4,7 +4,7 @@ export const PlaylistsPage = () => {
   return (
     <>
       <h1>Playlists</h1>
-      <Playlists />
+      <Playlists isSearchActive />
     </>
   );
 };

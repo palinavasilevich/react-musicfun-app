@@ -4,10 +4,14 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button, Textarea, TextField } from "../../../../shared/components";
 
 import { client } from "../../../../shared/api/client";
-import type { SchemaUpdatePlaylistRequestPayload } from "../../../../shared/api/schema";
+import type {
+  SchemaGetPlaylistsOutput,
+  SchemaUpdatePlaylistRequestPayload,
+} from "../../../../shared/api/schema";
 
 import cls from "./EditPlaylistForm.module.css";
 import { useEffect } from "react";
+import { useMeQuery } from "../../../auth/api/useMeQuery";
 
 type Props = {
   playlistId: string | null;
@@ -16,6 +20,8 @@ type Props = {
 export const EditPlaylistForm = ({ playlistId }: Props) => {
   const { register, handleSubmit, reset } =
     useForm<SchemaUpdatePlaylistRequestPayload>();
+
+  const { data: userData } = useMeQuery();
 
   useEffect(() => {
     reset();
@@ -27,7 +33,7 @@ export const EditPlaylistForm = ({ playlistId }: Props) => {
     isError,
     error,
   } = useQuery({
-    queryKey: ["playlists", playlistId],
+    queryKey: ["playlists", "details", playlistId],
     queryFn: async () => {
       const response = await client.GET("/playlists/{playlistId}", {
         params: {
@@ -44,6 +50,8 @@ export const EditPlaylistForm = ({ playlistId }: Props) => {
 
   const queryClient = useQueryClient();
 
+  const queryKey = ["playlists", "my", userData!.userId];
+
   const { mutate: editPlaylist } = useMutation({
     mutationFn: async (data: SchemaUpdatePlaylistRequestPayload) => {
       const response = await client.PUT("/playlists/{playlistId}", {
@@ -57,12 +65,54 @@ export const EditPlaylistForm = ({ playlistId }: Props) => {
 
       return response.data;
     },
-    onSuccess: () => {
+
+    onMutate: async (editedPlaylist: SchemaUpdatePlaylistRequestPayload) => {
+      // Cancel any outgoing refetches
+      // (so they don't overwrite our optimistic update)
+      await queryClient.cancelQueries({ queryKey: ["playlists"] });
+
+      // Snapshot the previous value
+      const previousCurrentUserPlaylists = queryClient.getQueryData(queryKey);
+
+      // Optimistically update to the new value
+      queryClient.setQueryData(
+        queryKey,
+        (previousPlaylists: SchemaGetPlaylistsOutput) => {
+          return {
+            ...previousPlaylists,
+            data: previousPlaylists.data.map((playlist) => {
+              if (playlist.id === playlistId) {
+                return {
+                  ...playlist,
+                  attributes: {
+                    ...playlist.attributes,
+                    title: editedPlaylist.title,
+                    description: editedPlaylist.description,
+                  },
+                };
+              } else {
+                return playlist;
+              }
+            }),
+          };
+        }
+      );
+
+      // Return a context with the previous playlists
+      return { previousCurrentUserPlaylists };
+    },
+
+    // If the mutation fails, use the context we returned above
+    onError: (_, __: SchemaUpdatePlaylistRequestPayload, context) => {
+      queryClient.setQueryData(queryKey, context?.previousCurrentUserPlaylists);
+    },
+
+    // Always refetch after error or success:
+    onSettled: () =>
       queryClient.invalidateQueries({
         queryKey: ["playlists"],
         refetchType: "all",
-      });
-    },
+      }),
   });
 
   const onSubmit = (data: SchemaUpdatePlaylistRequestPayload) => {

@@ -10,12 +10,25 @@ import cls from "./Playlists.module.css";
 
 type Props = {
   userId?: string;
+  isSearchActive?: boolean;
   onSelectPlaylist?: (playlistId: string) => void;
 };
 
-export const Playlists = ({ userId, onSelectPlaylist }: Props) => {
+export const Playlists = ({
+  userId,
+  isSearchActive,
+  onSelectPlaylist,
+}: Props) => {
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+
+  const queryKey = userId
+    ? ["playlists", "my", userId]
+    : ["playlists", { page, search: searchTerm }];
+
+  const queryParams = userId
+    ? { userId }
+    : { pageNumber: page, search: searchTerm };
 
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.currentTarget.value);
@@ -32,15 +45,12 @@ export const Playlists = ({ userId, onSelectPlaylist }: Props) => {
     isError,
     error,
   } = useQuery({
-    queryKey: ["playlists", { page, search: searchTerm, userId }],
+    // eslint-disable-next-line @tanstack/query/exhaustive-deps
+    queryKey: queryKey,
     queryFn: async ({ signal }) => {
       const response = await client.GET("/playlists", {
         params: {
-          query: {
-            pageNumber: page,
-            search: searchTerm,
-            userId,
-          },
+          query: queryParams,
         },
         signal,
       });
@@ -60,11 +70,13 @@ export const Playlists = ({ userId, onSelectPlaylist }: Props) => {
 
   return (
     <div className={cls.playlists}>
-      <SearchField
-        value={searchTerm}
-        onChange={handleSearch}
-        placeholder="Search playlists"
-      />
+      {isSearchActive && (
+        <SearchField
+          value={searchTerm}
+          onChange={handleSearch}
+          placeholder="Search playlists"
+        />
+      )}
 
       <ul className={cls.list}>
         {playlists.data.map((playlist) => (
