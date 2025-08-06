@@ -1,0 +1,9 @@
+.editPlaylistForm {
+  margin: 2rem auto;
+  padding: 1rem;
+  max-width: 550px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}

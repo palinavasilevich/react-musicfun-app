@@ -10,14 +10,19 @@ import cls from "./Playlists.module.css";
 
 type Props = {
   userId?: string;
+  onSelectPlaylist?: (playlistId: string) => void;
 };
 
-export const Playlists = ({ userId }: Props) => {
+export const Playlists = ({ userId, onSelectPlaylist }: Props) => {
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.currentTarget.value);
+  };
+
+  const handleSelectPlaylist = (playlistId: string) => {
+    onSelectPlaylist?.(playlistId);
   };
 
   const {
@@ -63,7 +68,11 @@ export const Playlists = ({ userId }: Props) => {
 
       <ul className={cls.list}>
         {playlists.data.map((playlist) => (
-          <li key={playlist.id} className={cls.playlist}>
+          <li
+            key={playlist.id}
+            className={cls.playlist}
+            onClick={() => handleSelectPlaylist(playlist.id)}
+          >
             {playlist.attributes.title}
             {playlist.attributes.user.id === userId && (
               <DeletePlaylistButton playlistId={playlist.id} />
