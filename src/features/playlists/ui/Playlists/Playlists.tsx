@@ -1,10 +1,9 @@
 import { useState, type ChangeEvent } from "react";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
-import { client } from "../../../../shared/api/client";
-import { Pagination } from "../../../../shared/ui/pagination";
-import { SearchField } from "../../../../shared/components";
+import { SearchField, Pagination } from "../../../../shared/components";
 import { DeletePlaylistButton } from "../DeletePlaylistButton";
+
+import { usePlaylistQuery } from "../../api/usePlaylistsQuery";
 
 import cls from "./Playlists.module.css";
 
@@ -19,16 +18,16 @@ export const Playlists = ({
   isSearchActive,
   onSelectPlaylist,
 }: Props) => {
-  const [page, setPage] = useState(1);
+  const [pageNumber, setPageNumber] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const queryKey = userId
-    ? ["playlists", "my", userId]
-    : ["playlists", { page, search: searchTerm }];
-
-  const queryParams = userId
-    ? { userId }
-    : { pageNumber: page, search: searchTerm };
+  const {
+    data: playlists,
+    isPending,
+    isFetching,
+    isError,
+    error,
+  } = usePlaylistQuery(userId, { search: searchTerm, pageNumber });
 
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.currentTarget.value);
@@ -37,32 +36,6 @@ export const Playlists = ({
   const handleSelectPlaylist = (playlistId: string) => {
     onSelectPlaylist?.(playlistId);
   };
-
-  const {
-    data: playlists,
-    isPending,
-    isFetching,
-    isError,
-    error,
-  } = useQuery({
-    // eslint-disable-next-line @tanstack/query/exhaustive-deps
-    queryKey: queryKey,
-    queryFn: async ({ signal }) => {
-      const response = await client.GET("/playlists", {
-        params: {
-          query: queryParams,
-        },
-        signal,
-      });
-
-      if (response.error) {
-        throw (response as unknown as { error: Error }).error;
-      }
-
-      return response.data!;
-    },
-    placeholderData: keepPreviousData,
-  });
 
   if (isPending) return <span>Loading...</span>;
 
@@ -95,8 +68,8 @@ export const Playlists = ({
 
       <Pagination
         pagesCount={playlists.meta.pagesCount}
-        currentPage={page}
-        onChangePageNumber={setPage}
+        currentPage={pageNumber}
+        onChangePageNumber={setPageNumber}
         isFetching={isFetching}
       />
     </div>
