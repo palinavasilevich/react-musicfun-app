@@ -6,6 +6,12 @@
   --color-disabled: #858585;
   --color-outline-focus: #1a75f5;
 
+  --color-primary-green: #2d635e;
+  --color-primary-yellow-pink: #fae9e0;
+
+  --color-secondary-light-gray: #e3ebe7;
+  --color-secondary-deep-green: #444a4a;
+
   /* Text */
   --color-text-primary: #fff;
   --color-text-primary-reverse: #000;

@@ -1,0 +1,43 @@
+.modal {
+  min-width: 40rem;
+  padding: 2rem;
+  z-index: 2;
+  border: none;
+  outline: none;
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  background-color: var(--color-primary-yellow-pink);
+  border-radius: 6px;
+  box-shadow: var(--shadow-sm);
+
+  animation: slide-down-fade-in 300ms ease-out forwards;
+}
+
+.modal::backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+}
+
+.closeBtn {
+  width: 1.75rem;
+  height: 1.75rem;
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-radius: 50%;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  font-size: var(--font-size-md);
+  font-weight: var(--border-radius-md);
+
+  cursor: pointer;
+}
+
+.closeBtn:hover {
+  color: var(--color-primary-green);
+}

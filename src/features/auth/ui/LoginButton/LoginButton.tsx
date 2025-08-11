@@ -1,5 +1,5 @@
 import { Button } from "../../../../shared/components";
-import { apiBaseUrl } from "../../../../shared/config/api.config";
+import { apiBaseUrl } from "../../../../shared/config/api-config";
 import { ProfileIcon } from "../../../../shared/icons";
 import { callbackUrl, useLoginMutation } from "../../api/useLoginMutation";
 

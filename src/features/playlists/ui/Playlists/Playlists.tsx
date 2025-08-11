@@ -11,12 +11,14 @@ type Props = {
   userId?: string;
   isSearchActive?: boolean;
   onSelectPlaylist?: (playlistId: string) => void;
+  onDeletePlaylist?: (playlistId: string) => void;
 };
 
 export const Playlists = ({
   userId,
   isSearchActive,
   onSelectPlaylist,
+  onDeletePlaylist,
 }: Props) => {
   const [pageNumber, setPageNumber] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
@@ -37,6 +39,10 @@ export const Playlists = ({
     onSelectPlaylist?.(playlistId);
   };
 
+  const handleDeletePlaylistClick = (playlistId: string) => {
+    onDeletePlaylist?.(playlistId);
+  };
+
   if (isPending) return <span>Loading...</span>;
 
   if (isError) return <span>{error.message}</span>;
@@ -53,14 +59,15 @@ export const Playlists = ({
 
       <ul className={cls.list}>
         {playlists.data.map((playlist) => (
-          <li
-            key={playlist.id}
-            className={cls.playlist}
-            onClick={() => handleSelectPlaylist(playlist.id)}
-          >
-            {playlist.attributes.title}
+          <li key={playlist.id} className={cls.playlist}>
+            <span onClick={() => handleSelectPlaylist(playlist.id)}>
+              {playlist.attributes.title}
+            </span>
             {playlist.attributes.user.id === userId && (
-              <DeletePlaylistButton playlistId={playlist.id} />
+              <DeletePlaylistButton
+                playlistId={playlist.id}
+                onDeleted={handleDeletePlaylistClick}
+              />
             )}
           </li>
         ))}

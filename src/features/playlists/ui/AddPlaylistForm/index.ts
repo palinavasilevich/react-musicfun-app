@@ -1,1 +1,1 @@
-export { AddPlaylistForm } from "./AddPlaylistForm";
+export { AddPlaylistForm } from "./ui/AddPlaylistForm";

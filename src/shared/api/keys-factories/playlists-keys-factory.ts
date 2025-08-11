@@ -8,6 +8,6 @@ export const playlistsKeys = {
     ...playlistsKeys.lists(),
     filters,
   ],
-  details: () => [...playlistsKeys.all],
+  details: () => [...playlistsKeys.all, "details"],
   detail: (id: string) => [...playlistsKeys.details(), id],
 };

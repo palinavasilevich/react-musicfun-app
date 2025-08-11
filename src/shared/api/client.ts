@@ -1,13 +1,14 @@
 import createClient, { type Middleware } from "openapi-fetch";
 import type { paths } from "./schema";
-import { apiBaseUrl, apiKey } from "../config/api.config";
+import { apiBaseUrl, apiKey } from "../config/api-config";
+import { localStorageKeys } from "../config/localstorage-keys";
 
 let refreshPromise: Promise<void> | null = null;
 
 const makeRefreshToken = () => {
   if (!refreshPromise) {
     refreshPromise = (async (): Promise<void> => {
-      const refreshToken = localStorage.getItem("musicfun-refresh-token");
+      const refreshToken = localStorage.getItem(localStorageKeys.refreshToken);
 
       if (!refreshToken) throw new Error("No refresh token.");
 
@@ -23,16 +24,16 @@ const makeRefreshToken = () => {
       });
 
       if (!response.ok) {
-        localStorage.removeItem("musicfun-access-token");
-        localStorage.removeItem("musicfun-refresh-token");
+        localStorage.removeItem(localStorageKeys.accessToken);
+        localStorage.removeItem(localStorageKeys.refreshToken);
 
         throw new Error("Refresh token failed.");
       }
 
       const data = await response.json();
 
-      localStorage.setItem("musicfun-access-token", data.accessToken);
-      localStorage.setItem("musicfun-refresh-token", data.refreshToken);
+      localStorage.setItem(localStorageKeys.accessToken, data.accessToken);
+      localStorage.setItem(localStorageKeys.refreshToken, data.refreshToken);
     })();
 
     refreshPromise.finally(() => {
@@ -45,7 +46,7 @@ const makeRefreshToken = () => {
 
 const authMiddleware: Middleware = {
   onRequest({ request }) {
-    const accessToken = localStorage.getItem("musicfun-access-token");
+    const accessToken = localStorage.getItem(localStorageKeys.accessToken);
 
     if (accessToken) {
       request.headers.set("Authorization", `Bearer ${accessToken}`);
@@ -60,9 +61,9 @@ const authMiddleware: Middleware = {
     if (response.ok) return response;
 
     if (!response.ok && response.status !== 401) {
-      throw new Error(
-        `${response.url}: ${response.status} ${response.statusText}`
-      );
+      const errorBody = await response.json();
+
+      throw errorBody;
     }
 
     try {
@@ -75,7 +76,7 @@ const authMiddleware: Middleware = {
       });
       retryRequest.headers.set(
         "Authorization",
-        "Bearer " + localStorage.getItem("musicfun-access-token")
+        "Bearer " + localStorage.getItem(localStorageKeys.accessToken)
       );
 
       return fetch(retryRequest);

@@ -1,10 +1,12 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { client } from "../../../shared/api/client";
+import { localStorageKeys } from "../../../shared/config/localstorage-keys";
+import { authKeys } from "../../../shared/api/keys-factories/auth-keys-factory";
 
 export const useLogoutMutation = () => {
   const queryClient = useQueryClient();
 
-  const refreshToken = localStorage.getItem("musicfun-refresh-token")!;
+  const refreshToken = localStorage.getItem(localStorageKeys.refreshToken)!;
 
   const mutation = useMutation({
     mutationFn: async () => {
@@ -18,11 +20,11 @@ export const useLogoutMutation = () => {
     },
 
     onSuccess: () => {
-      localStorage.removeItem("musicfun-refresh-token");
-      localStorage.removeItem("musicfun-access-token");
+      localStorage.removeItem(localStorageKeys.accessToken);
+      localStorage.removeItem(localStorageKeys.refreshToken);
 
       queryClient.resetQueries({
-        queryKey: ["auth", "me"],
+        queryKey: authKeys.me(),
       });
     },
   });

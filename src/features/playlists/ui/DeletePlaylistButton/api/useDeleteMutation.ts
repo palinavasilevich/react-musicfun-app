@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { client } from "../../../shared/api/client";
-import type { SchemaGetPlaylistsOutput } from "../../../shared/api/schema";
+import { client } from "../../../../../shared/api/client";
+import { playlistsKeys } from "../../../../../shared/api/keys-factories/playlists-keys-factory";
+import type { SchemaGetPlaylistsOutput } from "../../../../../shared/api/schema";
 
 export const useDeleteMutation = () => {
   const queryClient = useQueryClient();
@@ -18,7 +19,7 @@ export const useDeleteMutation = () => {
     },
     onSuccess: (_, playlistId: string) => {
       queryClient.setQueriesData(
-        { queryKey: ["playlists"] },
+        { queryKey: playlistsKeys.lists() },
         (previousPlaylists: SchemaGetPlaylistsOutput) => {
           return {
             ...previousPlaylists,
@@ -28,6 +29,10 @@ export const useDeleteMutation = () => {
           };
         }
       );
+
+      queryClient.removeQueries({
+        queryKey: playlistsKeys.detail(playlistId),
+      });
     },
   });
 };
