@@ -15,5 +15,5 @@
 
 .activeLink,
 .link:hover {
-  color: var(--color-accent);
+  color: var(--color-primary);
 }

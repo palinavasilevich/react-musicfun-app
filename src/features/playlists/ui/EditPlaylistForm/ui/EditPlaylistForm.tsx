@@ -72,9 +72,16 @@ export const EditPlaylistForm = ({ playlistId, onCancelEditing }: Props) => {
         defaultValue={playlist.data.attributes.description ?? ""}
         errorMessage={errors.description && errors.description.message}
       />
-      <div>
-        <Button type="submit">Save</Button>
-        <Button type="reset" onClick={handleCancelEditingClick}>
+      <div className={cls.actions}>
+        <Button type="submit" fullWidth className={cls.btn}>
+          Save
+        </Button>
+        <Button
+          type="reset"
+          fullWidth
+          className={cls.btn}
+          onClick={handleCancelEditingClick}
+        >
           Cancel
         </Button>
       </div>

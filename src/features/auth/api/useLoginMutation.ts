@@ -1,8 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { client } from "../../../shared/api/client";
 import { localStorageKeys } from "../../../shared/config/localstorage-keys";
+import { currentDomain } from "../../../shared/config/api-config";
 
-export const callbackUrl = "http://localhost:5173/oauth/callback";
+export const callbackUrl = `${currentDomain}/oauth/callback`;
 
 export const useLoginMutation = () => {
   const queryClient = useQueryClient();

@@ -7,3 +7,12 @@
   align-items: center;
   gap: 2rem;
 }
+
+.actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.btn {
+  width: 120px;
+}

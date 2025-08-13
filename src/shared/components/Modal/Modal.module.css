@@ -10,9 +10,11 @@
   left: 50%;
   transform: translate(-50%, -50%);
 
-  background-color: var(--color-primary-yellow-pink);
+  background-color: var(--color-bg-interactive-secondary);
   border-radius: 6px;
   box-shadow: var(--shadow-sm);
+
+  color: var(--color-text-primary);
 
   animation: slide-down-fade-in 300ms ease-out forwards;
 }
@@ -32,12 +34,13 @@
   border: none;
   outline: none;
   background-color: transparent;
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-xl);
   font-weight: var(--border-radius-md);
+  color: var(--color-text-primary);
 
   cursor: pointer;
 }
 
 .closeBtn:hover {
-  color: var(--color-primary-green);
+  color: var(--color-text-primary-reverse);
 }

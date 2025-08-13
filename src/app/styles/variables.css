@@ -6,8 +6,7 @@
   --color-disabled: #858585;
   --color-outline-focus: #1a75f5;
 
-  --color-primary-green: #2d635e;
-  --color-primary-yellow-pink: #fae9e0;
+  --color-primary: #7c3aed;
 
   --color-secondary-light-gray: #e3ebe7;
   --color-secondary-deep-green: #444a4a;
@@ -20,7 +19,7 @@
   --color-text-error: #f51a51;
 
   /* Backgrounds */
-  --color-bg-primary: #000;
+  --color-bg-primary: #030712;
   --color-bg-secondary: #141414;
   --color-bg-primary-reverse: #fff;
   --color-bg-input-hover: #262626;
