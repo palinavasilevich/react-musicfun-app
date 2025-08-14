@@ -1,5 +1,5 @@
+import clsx from "clsx";
 import { PaginationNav } from "./PaginationNav/PaginationNav.tsx";
-
 import cls from "./Pagination.module.css";
 
 type Props = {
@@ -7,16 +7,22 @@ type Props = {
   pagesCount: number;
   onChangePageNumber: (page: number) => void;
   isFetching: boolean;
+  className?: string;
 };
 
 export const Pagination = ({
   currentPage,
   pagesCount,
-  onChangePageNumber,
+  className,
   isFetching,
+  onChangePageNumber,
 }: Props) => {
   return (
-    <div className={cls.container}>
+    <div
+      className={clsx(cls.pagination, className)}
+      role="navigation"
+      aria-label="Pagination"
+    >
       <PaginationNav
         current={currentPage}
         pagesCount={pagesCount}
