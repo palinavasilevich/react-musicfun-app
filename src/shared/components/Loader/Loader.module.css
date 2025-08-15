@@ -9,55 +9,59 @@
 }
 
 .loader {
-  width: 48px;
-  height: 40px;
-  margin-top: 30px;
-  display: inline-block;
+  margin: auto;
+  width: 100px;
+  height: 30px;
+  overflow: hidden;
   position: relative;
-  background: #fff;
-  border-radius: 15% 15% 35% 35%;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+  box-shadow:
+    0px 35px 0 -5px #aaa,
+    0 -5px 0 0px #ddd,
+    0 -25px 0 -5px #fff,
+    -25px -30px 0 0px #ddd,
+    -25px 30px 0 0px #ddd,
+    25px -30px 0 0px #ddd,
+    25px 30px 0 0px #ddd,
+    20px 10px 0 5px #ddd,
+    20px -10px 0 5px #ddd,
+    -20px -10px 0 5px #ddd,
+    -20px 10px 0 5px #ddd;
 }
-.loader::after {
+.loader:after,
+.loader:before {
   content: "";
-  box-sizing: border-box;
+  border-radius: 100%;
+  width: 35px;
+  height: 35px;
+  display: block;
   position: absolute;
-  left: 45px;
-  top: 8px;
-  border: 4px solid #fff;
-  width: 16px;
-  height: 20px;
-  border-radius: 0 4px 4px 0;
+  border: 4px dashed #fff;
+  bottom: -4px;
+  transform: rotate(0deg);
+  box-sizing: border-box;
+  animation: tape 4s linear infinite;
 }
-.loader::before {
-  content: "";
-  position: absolute;
-  width: 1px;
-  height: 10px;
-  color: #fff;
-  top: -15px;
-  left: 11px;
-  box-sizing: border-box;
-  animation: animloader 1s ease infinite;
+.loader:before {
+  right: 0;
+  box-shadow:
+    0 0 0 4px #fff,
+    0 0 0 34px #000;
+}
+.loader:after {
+  left: 0;
+  box-shadow:
+    0 0 0 4px #fff,
+    0 0 0 65px #000;
 }
 
-@keyframes animloader {
+@keyframes tape {
   0% {
-    box-shadow:
-      2px 0px rgba(255, 255, 255, 0),
-      12px 0px rgba(255, 255, 255, 0.3),
-      20px 0px rgba(255, 255, 255, 0);
-  }
-  50% {
-    box-shadow:
-      2px -5px rgba(255, 255, 255, 0.5),
-      12px -3px rgba(255, 255, 255, 0.5),
-      20px -2px rgba(255, 255, 255, 0.6);
+    transform: rotate(0deg) scale(0.4);
   }
   100% {
-    box-shadow:
-      2px -8px rgba(255, 255, 255, 0),
-      12px -5px rgba(255, 255, 255, 0),
-      20px -5px rgba(255, 255, 255, 0);
+    transform: rotate(-360deg) scale(0.4);
   }
 }
 
