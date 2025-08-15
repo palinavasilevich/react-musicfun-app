@@ -7,3 +7,10 @@
 .link:hover {
   color: var(--color-primary);
 }
+
+.avatarContainer {
+  overflow: hidden;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+}

@@ -8,12 +8,25 @@
   border-bottom: var(--color-border-base) 1px solid;
 }
 
-.linksBlock {
+.menu {
   display: flex;
+  align-items: center;
   gap: 10px;
 }
 
 .activeLink,
 .link:hover {
   color: var(--color-primary);
+}
+
+.logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logoImg {
+  width: 34px;
+  height: 34px;
+  object-fit: cover;
 }

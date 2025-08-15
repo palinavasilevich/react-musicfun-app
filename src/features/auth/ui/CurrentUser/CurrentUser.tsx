@@ -1,8 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { useMeQuery } from "../../api/useMeQuery";
+import { LogoutButton } from "../LogoutButton";
+import defaultAvatarImg from "../../../../assets/img/default-avatar.png";
 
 import cls from "./CurrentUser.module.css";
-import { LogoutButton } from "../LogoutButton";
 
 export const CurrentUser = () => {
   const { data } = useMeQuery();
@@ -11,6 +12,8 @@ export const CurrentUser = () => {
     return <span>...</span>;
   }
 
+  console.log(data);
+
   return (
     <div className={cls.meInfoContainer}>
       <Link
@@ -18,7 +21,9 @@ export const CurrentUser = () => {
         className={cls.link}
         activeOptions={{ exact: true }}
       >
-        {data!.login}
+        <div className={cls.avatarContainer}>
+          <img src={defaultAvatarImg} alt="avatar" />
+        </div>
       </Link>
       <LogoutButton />
     </div>
