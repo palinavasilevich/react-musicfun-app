@@ -4,8 +4,11 @@ type ModalType = "add" | "edit";
 
 type ModalContextType = {
   currentModal: ModalType | null;
-  modalData: unknown;
-  openModal: (type: ModalType, data?: unknown) => void;
+  editingPlaylistId: string | null;
+  openModal: {
+    (type: "add"): void;
+    (type: "edit", playlistId: string): void;
+  };
   closeModal: () => void;
 };
 
@@ -13,23 +16,29 @@ const ModalContext = createContext<ModalContextType | undefined>(undefined);
 
 export const ModalProvider = ({ children }: React.PropsWithChildren) => {
   const [currentModal, setCurrentModal] = useState<ModalType | null>(null);
-  const [modalData, setModalData] = useState<unknown>(null);
+  const [editingPlaylistId, setEditingPlaylistId] = useState<string | null>(
+    null
+  );
 
-  const openModal = (type: ModalType, data?: unknown) => {
+  const openModal = ((type: ModalType, playlistId?: string) => {
     setCurrentModal(type);
-    setModalData(data || null);
-  };
+    if (type === "edit") {
+      setEditingPlaylistId(playlistId!);
+    } else {
+      setEditingPlaylistId(null);
+    }
+  }) as ModalContextType["openModal"];
 
   const closeModal = () => {
     setCurrentModal(null);
-    setModalData(null);
+    setEditingPlaylistId(null);
   };
 
   return (
     <ModalContext.Provider
       value={{
         currentModal,
-        modalData,
+        editingPlaylistId,
         openModal,
         closeModal,
       }}

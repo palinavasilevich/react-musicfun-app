@@ -14,7 +14,7 @@
   font-weight: 600;
   color: var(--color-text-primary);
 
-  transition: opacity 200ms;
+  transition: all 200ms ease;
 }
 
 .button:focus-visible {
@@ -24,7 +24,7 @@
 
 .button:disabled {
   cursor: initial;
-  background-color: var(--color-disabled);
+  opacity: 0.5;
 }
 
 .button:hover:not(:disabled),
@@ -38,6 +38,14 @@
 
 .secondary {
   background-color: var(--color-bg-interactive-secondary);
+}
+
+.withIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+
+  background: transparent;
 }
 
 .fullWidth {

@@ -1,27 +1,25 @@
 import { useState, type ChangeEvent } from "react";
-
-import { SearchField, Pagination } from "../../../../shared/components";
-import { DeletePlaylistButton } from "../DeletePlaylistButton";
-
 import { usePlaylistQuery } from "../../api/usePlaylistsQuery";
-
+import {
+  SearchField,
+  Pagination,
+  ContentList,
+  Loader,
+} from "../../../../shared/components";
+import { PlaylistCard } from "../PlaylistCard";
+import { useModalContext } from "../../../../app/context/ModalContext";
 import cls from "./Playlists.module.css";
 
 type Props = {
   userId?: string;
   isSearchActive?: boolean;
-  onSelectPlaylist?: (playlistId: string) => void;
-  onDeletePlaylist?: (playlistId: string) => void;
 };
 
-export const Playlists = ({
-  userId,
-  isSearchActive,
-  onSelectPlaylist,
-  onDeletePlaylist,
-}: Props) => {
+export const Playlists = ({ userId, isSearchActive }: Props) => {
   const [pageNumber, setPageNumber] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+
+  const { openModal } = useModalContext();
 
   const {
     data: playlists,
@@ -35,50 +33,54 @@ export const Playlists = ({
     setSearchTerm(e.currentTarget.value);
   };
 
-  const handleSelectPlaylist = (playlistId: string) => {
-    onSelectPlaylist?.(playlistId);
-  };
+  const openEditPlaylistModal = (playlistId: string) =>
+    openModal("edit", playlistId);
 
-  const handleDeletePlaylistClick = (playlistId: string) => {
-    onDeletePlaylist?.(playlistId);
-  };
+  let content;
 
-  if (isPending) return <span>Loading...</span>;
-
-  if (isError) return <span>{error.message}</span>;
-
-  return (
-    <div className={cls.playlists}>
-      {isSearchActive && (
-        <SearchField
-          value={searchTerm}
-          onChange={handleSearch}
-          placeholder="Search playlists"
+  if (isPending) {
+    content = <Loader />;
+  } else if (isError) {
+    content = (
+      <span>
+        {error.message || "Playlist loading error. Please try again later."}
+      </span>
+    );
+  } else if (playlists?.data.length === 0) {
+    content = <span>No results found for your search.</span>;
+  } else if (playlists?.data) {
+    content = (
+      <>
+        {isSearchActive && (
+          <SearchField
+            value={searchTerm}
+            onChange={handleSearch}
+            placeholder="Search playlists"
+          />
+        )}
+        <ContentList
+          data={playlists.data}
+          renderItem={(playlist) => (
+            <PlaylistCard
+              id={playlist.id}
+              title={playlist.attributes.title}
+              images={playlist.attributes.images}
+              description={playlist.attributes.description}
+              isShowActionButtons={playlist.attributes.user.id === userId}
+              onEditPlaylist={openEditPlaylistModal}
+            />
+          )}
         />
-      )}
+        <Pagination
+          pagesCount={playlists.meta.pagesCount || 1}
+          currentPage={pageNumber}
+          onChangePageNumber={setPageNumber}
+          isFetching={isFetching}
+          className={cls.pagination}
+        />
+      </>
+    );
+  }
 
-      <ul className={cls.list}>
-        {playlists.data.map((playlist) => (
-          <li key={playlist.id} className={cls.playlist}>
-            <span onClick={() => handleSelectPlaylist(playlist.id)}>
-              {playlist.attributes.title}
-            </span>
-            {playlist.attributes.user.id === userId && (
-              <DeletePlaylistButton
-                playlistId={playlist.id}
-                onDeleted={handleDeletePlaylistClick}
-              />
-            )}
-          </li>
-        ))}
-      </ul>
-
-      <Pagination
-        pagesCount={playlists.meta.pagesCount}
-        currentPage={pageNumber}
-        onChangePageNumber={setPageNumber}
-        isFetching={isFetching}
-      />
-    </div>
-  );
+  return <div className={cls.playlists}>{content}</div>;
 };

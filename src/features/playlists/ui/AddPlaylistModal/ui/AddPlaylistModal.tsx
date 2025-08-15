@@ -1,26 +1,22 @@
 import { useForm } from "react-hook-form";
-
 import {
   Button,
   Modal,
+  ModalFooter,
+  SmallLoader,
   Textarea,
   TextField,
 } from "../../../../../shared/components";
 import { useAddPlaylistMutation } from "../api/useAddPlaylistMutation";
-
 import type { SchemaCreatePlaylistRequestPayload } from "../../../../../shared/api/schema";
-
 import { type JsonApiErrorDocument } from "../../../../../shared/api/json-api-error";
 import { queryErrorHandlerForRHFFactory } from "../../../../../shared/api/query-error-handler-for-rhf-factory";
+import { useModalContext } from "../../../../../app/context/ModalContext";
+import cls from "./AddPlaylistModal.module.css";
 
-import cls from "./AddPlaylistForm.module.css";
+export const AddPlaylistModal = () => {
+  const { currentModal, closeModal } = useModalContext();
 
-type Props = {
-  isOpen: boolean;
-  onClose: () => void;
-};
-
-export const AddPlaylistForm = ({ isOpen, onClose }: Props) => {
   const {
     register,
     handleSubmit,
@@ -35,9 +31,8 @@ export const AddPlaylistForm = ({ isOpen, onClose }: Props) => {
   const onSubmit = async (data: SchemaCreatePlaylistRequestPayload) => {
     try {
       await createNewPlaylist(data);
-
       reset();
-      onClose();
+      closeModal();
     } catch (error) {
       queryErrorHandlerForRHFFactory({ setError })(
         error as unknown as JsonApiErrorDocument
@@ -45,10 +40,11 @@ export const AddPlaylistForm = ({ isOpen, onClose }: Props) => {
     }
   };
 
+  if (currentModal !== "add") return null;
+
   return (
-    <Modal onClose={onClose} isOpen={isOpen}>
+    <Modal isOpen={true} onClose={closeModal} title="Edit Playlist">
       <form className={cls.addPlaylistForm} onSubmit={handleSubmit(onSubmit)}>
-        <h2>Add New Playlist</h2>
         {errors.title && <p>{errors.title.message}</p>}
         <TextField
           {...register("title")}
@@ -59,10 +55,12 @@ export const AddPlaylistForm = ({ isOpen, onClose }: Props) => {
           {...register("description")}
           errorMessage={errors.description && errors.description.message}
         />
-        <Button type="submit" disabled={isPending}>
-          {isPending ? "Submitting..." : "Create New Playlist"}
-        </Button>
-        {errors.root?.server && <p>{errors.root?.server.message}</p>}
+        <ModalFooter>
+          <Button type="submit" disabled={isPending}>
+            {isPending ? <SmallLoader /> : "Create New Playlist"}
+          </Button>
+          {errors.root?.server && <p>{errors.root?.server.message}</p>}
+        </ModalFooter>
       </form>
     </Modal>
   );

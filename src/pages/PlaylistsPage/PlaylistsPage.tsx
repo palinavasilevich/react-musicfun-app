@@ -1,9 +1,12 @@
 import { Playlists } from "../../features/playlists/ui/Playlists";
+import { Typography } from "../../shared/components";
 
 export const PlaylistsPage = () => {
   return (
     <>
-      <h1>Playlists</h1>
+      <Typography variant="h2" as="h1">
+        Playlists
+      </Typography>
       <Playlists isSearchActive />
     </>
   );

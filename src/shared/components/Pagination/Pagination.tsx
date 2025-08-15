@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { PaginationNav } from "./PaginationNav/PaginationNav.tsx";
 import cls from "./Pagination.module.css";
+import { SmallLoader } from "../Loader/Loader.tsx";
 
 type Props = {
   currentPage: number;
@@ -28,7 +29,7 @@ export const Pagination = ({
         pagesCount={pagesCount}
         onChange={onChangePageNumber}
       />
-      {isFetching && "⌛️"}
+      {isFetching && <SmallLoader />}
     </div>
   );
 };

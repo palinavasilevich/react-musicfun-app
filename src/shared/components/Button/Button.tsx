@@ -3,7 +3,7 @@ import type { ComponentProps, ElementType } from "react";
 
 import cls from "./Button.module.css";
 
-export type ButtonVariant = "primary" | "secondary";
+export type ButtonVariant = "primary" | "secondary" | "withIcon";
 
 export type ButtonProps<T extends ElementType = "button"> = {
   as?: T;

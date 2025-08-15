@@ -6,3 +6,4 @@ export * from "./Textarea";
 export * from "./Modal";
 export * from "./Pagination";
 export * from "./ContentList";
+export * from "./Loader";

@@ -35,3 +35,14 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn {
+  padding: 0;
+  background: var(--color-primary);
+}

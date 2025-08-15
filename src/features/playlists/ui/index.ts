@@ -1,4 +1,4 @@
 export * from "./Playlists";
-export * from "./AddPlaylistForm";
+export * from "./AddPlaylistModal";
 export * from "./DeletePlaylistButton";
-export * from "./EditPlaylistForm";
+export * from "./EditPlaylistModal";

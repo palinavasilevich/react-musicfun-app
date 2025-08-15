@@ -1,39 +1,26 @@
-import { useState } from "react";
 import { Navigate } from "@tanstack/react-router";
-
 import { useMeQuery } from "../../features/auth/api/useMeQuery";
 import { Playlists } from "../../features/playlists/ui/Playlists";
-import { AddPlaylistForm, EditPlaylistForm } from "../../features/playlists/ui";
-import { Button, Typography } from "../../shared/components";
+import {
+  AddPlaylistModal,
+  EditPlaylistModal,
+} from "../../features/playlists/ui";
+import { Button, Typography, Loader } from "../../shared/components";
+
+import { useModalContext } from "../../app/context/ModalContext";
 
 import cls from "./MyPlaylistsPage.module.css";
 
 export const MyPlaylistsPage = () => {
-  const { data, isPending, isError } = useMeQuery();
-  const [editingPlaylistId, setEditingPlaylistId] = useState<string | null>(
-    null
-  );
+  const { data, isPending } = useMeQuery();
+  const { openModal } = useModalContext();
 
-  const [openModal, setOpenModal] = useState(false);
-
-  const closeModal = () => setOpenModal(false);
-
-  const handlePlaylistDelete = (playlistId: string) => {
-    if (playlistId === editingPlaylistId) {
-      setEditingPlaylistId(null);
-    }
-  };
-
-  const handleCancelEditing = () => setEditingPlaylistId(null);
+  const openAddNewPlaylistModal = () => openModal("add");
 
   let content;
 
   if (isPending) {
-    content = <span>Loading...</span>;
-  }
-
-  if (isError) {
-    content = <span>Playlist loading error. Please try again later.</span>;
+    content = <Loader />;
   }
 
   if (!data) {
@@ -43,17 +30,10 @@ export const MyPlaylistsPage = () => {
   if (data) {
     content = (
       <>
-        <Button onClick={() => setOpenModal(true)}>Add new playlist</Button>
-        <AddPlaylistForm onClose={closeModal} isOpen={openModal} />
-        <Playlists
-          userId={data.userId}
-          onSelectPlaylist={setEditingPlaylistId}
-          onDeletePlaylist={handlePlaylistDelete}
-        />
-        <EditPlaylistForm
-          playlistId={editingPlaylistId}
-          onCancelEditing={handleCancelEditing}
-        />
+        <Button onClick={openAddNewPlaylistModal}>Add new playlist</Button>
+        <Playlists userId={data.userId} />
+        <AddPlaylistModal />
+        <EditPlaylistModal />
       </>
     );
   }

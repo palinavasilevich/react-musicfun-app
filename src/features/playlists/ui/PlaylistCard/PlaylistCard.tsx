@@ -1,11 +1,10 @@
-import { Link } from "@tanstack/react-router";
 import { Card } from "../../../../shared/components/Card";
-import { Typography } from "../../../../shared/components";
-import { DeletePlaylistButton } from "../DeletePlaylistButton";
+import { Button, Typography } from "../../../../shared/components";
+import { EditIcon } from "../../../../shared/icons";
 import type { SchemaPlaylistImagesOutputDto } from "../../../../shared/api/schema";
 import noCoverImg from "../../../../assets/img/no-cover.png";
-
 import cls from "./PlaylistCard.module.css";
+import { DeletePlaylistButton } from "../DeletePlaylistButton";
 
 type PlaylistCardPropsBase = {
   id: string;
@@ -14,21 +13,21 @@ type PlaylistCardPropsBase = {
   description: string | null;
 };
 
-type PlaylistCardWithDeleteButton = PlaylistCardPropsBase & {
-  isShowDeleteButton: true;
-  onDeletePlaylist: (playlistId: string) => void;
+type PlaylistCardWithActionButtons = PlaylistCardPropsBase & {
+  isShowActionButtons: true;
+  onEditPlaylist: (playlistId: string) => void;
 };
 
-type PlaylistCardWithoutDeleteButton = PlaylistCardPropsBase & {
-  isShowDeleteButton?: false;
+type PlaylistCardWithoutActionButtons = PlaylistCardPropsBase & {
+  isShowActionButtons?: false;
 };
 
 type PlaylistCardProps =
-  | PlaylistCardWithDeleteButton
-  | PlaylistCardWithoutDeleteButton;
+  | PlaylistCardWithActionButtons
+  | PlaylistCardWithoutActionButtons;
 
 export const PlaylistCard = (props: PlaylistCardProps) => {
-  const { id, title, images, description, isShowDeleteButton } = props;
+  const { id, title, images, description, isShowActionButtons } = props;
 
   let imageSrc = images.main?.length ? images.main[0]?.url : undefined;
 
@@ -36,7 +35,7 @@ export const PlaylistCard = (props: PlaylistCardProps) => {
     imageSrc = noCoverImg;
   }
   return (
-    <Card as={Link} to={`/playlists/${id}`} className={cls.card}>
+    <Card className={cls.card}>
       <div className={cls.image}>
         <img src={imageSrc} alt={title} aria-hidden />
       </div>
@@ -47,11 +46,17 @@ export const PlaylistCard = (props: PlaylistCardProps) => {
         {description}
       </Typography>
 
-      {isShowDeleteButton && (
-        <DeletePlaylistButton
-          playlistId={id}
-          onDeleted={props.onDeletePlaylist}
-        />
+      {isShowActionButtons && (
+        <div className={cls.actions}>
+          <DeletePlaylistButton playlistId={id} className={cls.btn} />
+          <Button
+            onClick={() => props.onEditPlaylist(id)}
+            variant="withIcon"
+            className={cls.btn}
+          >
+            <EditIcon />
+          </Button>
+        </div>
       )}
     </Card>
   );
